@@ -1,0 +1,26 @@
+
+name: 02-workloads-strapi-plan
+
+on:
+   pull_request:  # The workflow runs when a push event occurs
+    types:
+      - opened  # The workflow triggers when the PR is opened
+    branches:
+      - main
+    paths:
+      - "02-workloads/04-strapi/**"
+      - ".github/workflows/02-workloads-strapi-plan.yaml"
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+  
+jobs:
+  terraform-plan:
+    uses: yakamozo10/shared-workflows/.github/workflows/terraform-plan-template.yaml@main
+    with:
+      terraform_version: "1.5.7"
+      working_directory: './02-workloads/04-strapi'
+      aws_iam_role_arn: 'arn:aws:iam::340752798883:role/github-strapi-infra-role-dev'
+      aws_iam_role_session_name: "github-ultralinkk-infra-role-dev"
+      aws_region: "eu-central-1"

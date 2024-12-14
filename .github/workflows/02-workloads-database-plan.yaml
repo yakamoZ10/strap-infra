@@ -1,0 +1,25 @@
+name: 02-workloads-database-plan
+
+on:
+   pull_request:  # The workflow runs when a push event occurs
+    branches:
+      - 'main'  # The workflow triggers only if the push occurs on the 'main' branch
+    types:
+      - opened  # The workflow triggers when the PR is opened
+    paths:
+      - "02-workloads/03-database/**"
+      - ".github/workflows/02-workloads-database-plan.yaml"
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+  
+jobs:
+  terraform-plan:
+    uses: yakamozo10/shared-workflows/.github/workflows/terraform-plan-template.yaml@main
+    with:
+      terraform_version: "1.5.7"
+      working_directory: './02-workloads/03-database'
+      aws_iam_role_arn: 'arn:aws:iam::340752798883:role/github-strapi-infra-role-dev'
+      aws_iam_role_session_name: "github-ultralink-infra-role-dev"
+      aws_region: "eu-central-1"

@@ -1,0 +1,26 @@
+
+name: 02-workloads-strapi-apply
+
+on:
+   pull_request:  # The workflow runs when a push event occurs
+    branches:
+      - 'main'  # The workflow triggers only if the push occurs on the 'main' branch
+    types:
+      - closed  # The workflow triggers when the PR is closed
+    paths:
+      - "02-workloads/04-strapi/**"
+      - ".github/workflows/02-workloads-strapi-apply.yaml"
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+  
+jobs:
+  terraform-apply:
+    uses: yakamozo10/shared-workflows/.github/workflows/terraform-apply-template.yaml@main
+    with:
+      terraform_version: "1.5.7"
+      working_directory: './02-workloads/04-strapi'
+      aws_iam_role_arn: 'arn:aws:iam::340752798883:role/github-strapi-infra-role-dev'
+      aws_iam_role_session_name: "github-ultralinkk-infra-role-dev"
+      aws_region: "eu-central-1"
